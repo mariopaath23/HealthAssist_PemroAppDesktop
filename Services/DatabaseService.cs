@@ -195,5 +195,28 @@ namespace HealthAssist.Services
             var user = await GetUserAsync();
             return user != null;
         }
+
+        public async Task DeleteDatabaseAsync()
+        {
+            if (_database != null)
+            {
+                await _database.CloseAsync();
+                _database = null;
+            }
+
+            try
+            {
+                if (File.Exists(_databasePath))
+                {
+                    File.Delete(_databasePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception (e.g., file in use)
+                System.Diagnostics.Debug.WriteLine($"Error deleting database: {ex.Message}");
+                throw; // Re-throw to notify the caller
+            }
+        }
     }
 }

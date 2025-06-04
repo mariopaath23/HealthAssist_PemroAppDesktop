@@ -55,6 +55,37 @@
                     <TextBlock Text="App Preferences" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,8"/>
                     <ComboBox x:Name="ThemeComboBox" Header="App Theme" SelectionChanged="ThemeComboBox_SelectionChanged"/>
                 </StackPanel>
+
+                <StackPanel Margin="0,24,0,0" Spacing="8">
+                    <TextBlock Text="Advanced Settings" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,0,0,8"/>
+                    <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="{ThemeResource ControlCornerRadius}">
+                        <StackPanel Padding="16" Spacing="12">
+                            <TextBlock Text="Reset Application" Style="{ThemeResource BaseTextBlockStyle}" FontWeight="SemiBold"/>
+                            <TextBlock Text="This will delete all your data (profile, medications, appointments) and reset the application to its initial state. This action cannot be undone."
+                       TextWrapping="Wrap"
+                       Style="{ThemeResource BodyTextBlockStyle}"
+                       Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+                            <Button x:Name="ResetApplicationButton"
+                    Content="Reset Application and Delete All Data"
+                    Click="ResetApplicationButton_Click"
+                    Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
+                    Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                    HorizontalAlignment="Left">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SystemFillColorCriticalBackgroundBrush}"/>
+                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{ThemeResource SystemFillColorCriticalBrush}"/>
+                                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{ThemeResource SystemFillColorCriticalBackgroundBrush}"/>
+                                        <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{ThemeResource SystemFillColorCriticalBrush}"/>
+                                    </ResourceDictionary>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
         <muxc:TeachingTip x:Name="SuccessTip" Title="Success" Subtitle="Changes saved successfully!" IsLightDismissEnabled="True"/>

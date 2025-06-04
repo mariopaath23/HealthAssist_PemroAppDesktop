@@ -1,12 +1,13 @@
 using HealthAssist.Models;
 using HealthAssist.Services;
+using HealthAssist.Views; // Required for OnboardingPage
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls; // Required for TeachingTip if used explicitly in C# beyond x:Name
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-// using Windows.Globalization.NumberFormatting; // For DecimalFormatter if you use it
+
 
 namespace HealthAssist.Views
 {
@@ -18,149 +19,143 @@ namespace HealthAssist.Views
 
         public SettingsPage()
         {
-            this.InitializeComponent(); // This must be the first line
+            this.InitializeComponent();
             _databaseService = new DatabaseService();
             this.Loaded += SettingsPage_Loaded;
         }
 
         private async void SettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
-            PopulateComboBoxes();
-            await LoadUserSettingsAsync();
+            PopulateComboBoxes(); //
+            await LoadUserSettingsAsync(); //
         }
 
         private void PopulateComboBoxes()
         {
-            BloodTypeEditComboBox.ItemsSource = new List<string> { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown" };
-            GenderEditComboBox.ItemsSource = new List<string> { "Male", "Female", "Other", "Prefer not to say" };
-            ThemeComboBox.ItemsSource = new List<string> { "Use system setting", "Light", "Dark" };
+            BloodTypeEditComboBox.ItemsSource = new List<string> { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown" }; //
+            GenderEditComboBox.ItemsSource = new List<string> { "Male", "Female", "Other", "Prefer not to say" }; //
+            ThemeComboBox.ItemsSource = new List<string> { "Use system setting", "Light", "Dark" }; //
         }
 
         private async Task LoadUserSettingsAsync()
         {
-            LoadingRing.IsActive = true;
-            _currentUser = await _databaseService.GetUserAsync();
+            LoadingRing.IsActive = true; //
+            _currentUser = await _databaseService.GetUserAsync(); //
 
             if (_currentUser != null)
             {
-                NameEditTextBox.Text = _currentUser.Name;
-                // DobEditPicker.Date is DateTimeOffset?, _currentUser.DateOfBirth is DateTime
-                DobEditPicker.Date = new DateTimeOffset(_currentUser.DateOfBirth);
-                BloodTypeEditComboBox.SelectedItem = _currentUser.BloodType;
-                AllergiesEditTextBox.Text = _currentUser.Allergies;
-                GenderEditComboBox.SelectedItem = _currentUser.Gender;
-                HeightEditNumberBox.Value = _currentUser.Height;
-                WeightEditNumberBox.Value = _currentUser.Weight;
+                NameEditTextBox.Text = _currentUser.Name; //
+                DobEditPicker.Date = new DateTimeOffset(_currentUser.DateOfBirth); //
+                BloodTypeEditComboBox.SelectedItem = _currentUser.BloodType; //
+                AllergiesEditTextBox.Text = _currentUser.Allergies; //
+                GenderEditComboBox.SelectedItem = _currentUser.Gender; //
+                HeightEditNumberBox.Value = _currentUser.Height; //
+                WeightEditNumberBox.Value = _currentUser.Weight; //
             }
 
-            string? themeSetting = await _databaseService.GetSettingAsync("AppTheme");
+            string? themeSetting = await _databaseService.GetSettingAsync("AppTheme"); //
             switch (themeSetting?.ToLowerInvariant())
             {
                 case "light":
-                    ThemeComboBox.SelectedItem = "Light";
+                    ThemeComboBox.SelectedItem = "Light"; //
                     break;
                 case "dark":
-                    ThemeComboBox.SelectedItem = "Dark";
+                    ThemeComboBox.SelectedItem = "Dark"; //
                     break;
                 default:
-                    ThemeComboBox.SelectedItem = "Use system setting";
+                    ThemeComboBox.SelectedItem = "Use system setting"; //
                     break;
             }
-            _isThemeComboBoxLoaded = true;
-            LoadingRing.IsActive = false;
+            _isThemeComboBoxLoaded = true; //
+            LoadingRing.IsActive = false; //
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Frame.CanGoBack) Frame.GoBack();
+            if (Frame.CanGoBack) Frame.GoBack(); //
         }
 
         private async void SaveProfileButton_Click(object sender, RoutedEventArgs e)
         {
             if (_currentUser == null)
             {
-                await ShowMessageDialogAsync("Error", "User profile not found. Please restart the app.");
+                await ShowMessageDialogAsync("Error", "User profile not found. Please restart the app."); //
                 return;
             }
 
-            if (!await ValidateProfileFormAsync()) return;
+            if (!await ValidateProfileFormAsync()) return; //
 
-            LoadingRing.IsActive = true;
-            SaveProfileButton.IsEnabled = false;
+            LoadingRing.IsActive = true; //
+            SaveProfileButton.IsEnabled = false; //
 
             try
             {
-                _currentUser.Name = NameEditTextBox.Text.Trim();
+                _currentUser.Name = NameEditTextBox.Text.Trim(); //
 
-                // Line 98/99 area in your error list
-                DateTimeOffset? pickedDob = DobEditPicker.Date; // Work with nullable local var
+                DateTimeOffset? pickedDob = DobEditPicker.Date; //
                 if (pickedDob.HasValue)
                 {
-                    _currentUser.DateOfBirth = pickedDob.Value.DateTime;
+                    _currentUser.DateOfBirth = pickedDob.Value.DateTime; //
                 }
-                // else: Validation should ensure it's not null if required.
-                // If DOB can be optional (not currently based on validation), handle accordingly.
 
-                _currentUser.BloodType = BloodTypeEditComboBox.SelectedItem as string ?? string.Empty;
-                _currentUser.Allergies = AllergiesEditTextBox.Text.Trim();
-                _currentUser.Gender = GenderEditComboBox.SelectedItem as string ?? string.Empty;
-                _currentUser.Height = HeightEditNumberBox.Value; // Assuming Value is double and not NaN (validation helps)
-                _currentUser.Weight = WeightEditNumberBox.Value; // Assuming Value is double and not NaN
-                _currentUser.UpdatedAt = DateTime.Now;
+                _currentUser.BloodType = BloodTypeEditComboBox.SelectedItem as string ?? string.Empty; //
+                _currentUser.Allergies = AllergiesEditTextBox.Text.Trim(); //
+                _currentUser.Gender = GenderEditComboBox.SelectedItem as string ?? string.Empty; //
+                _currentUser.Height = HeightEditNumberBox.Value; //
+                _currentUser.Weight = WeightEditNumberBox.Value; //
+                _currentUser.UpdatedAt = DateTime.Now; //
 
-                await _databaseService.SaveUserAsync(_currentUser);
+                await _databaseService.SaveUserAsync(_currentUser); //
 
-                // Lines 108, 109 for SuccessTip
-                if (SuccessTip != null) // Check if SuccessTip was initialized
+                if (SuccessTip != null)
                 {
-                    SuccessTip.Subtitle = "Profile updated successfully!";
-                    SuccessTip.IsOpen = true;
+                    SuccessTip.Subtitle = "Profile updated successfully!"; //
+                    SuccessTip.IsOpen = true; //
                 }
             }
             catch (Exception ex)
             {
-                await ShowMessageDialogAsync("Error", $"Failed to save profile: {ex.Message}");
+                await ShowMessageDialogAsync("Error", $"Failed to save profile: {ex.Message}"); //
             }
             finally
             {
-                LoadingRing.IsActive = false;
-                SaveProfileButton.IsEnabled = true;
+                LoadingRing.IsActive = false; //
+                SaveProfileButton.IsEnabled = true; //
             }
         }
 
         private async Task<bool> ValidateProfileFormAsync()
         {
-            if (string.IsNullOrWhiteSpace(NameEditTextBox.Text))
+            if (string.IsNullOrWhiteSpace(NameEditTextBox.Text)) //
             {
-                await ShowMessageDialogAsync("Validation Error", "Full Name is required.");
+                await ShowMessageDialogAsync("Validation Error", "Full Name is required."); //
                 return false;
             }
 
-            // Line 129 warning area
-            DateTimeOffset? validateDob = DobEditPicker.Date; // Use local nullable var
-            if (validateDob == null) // This comparison is now fine
+            DateTimeOffset? validateDob = DobEditPicker.Date; //
+            if (validateDob == null)
             {
-                await ShowMessageDialogAsync("Validation Error", "Date of Birth is required.");
+                await ShowMessageDialogAsync("Validation Error", "Date of Birth is required."); //
                 return false;
             }
-            if (BloodTypeEditComboBox.SelectedItem == null)
+            if (BloodTypeEditComboBox.SelectedItem == null) //
             {
-                await ShowMessageDialogAsync("Validation Error", "Blood Type is required.");
+                await ShowMessageDialogAsync("Validation Error", "Blood Type is required."); //
                 return false;
             }
-            if (GenderEditComboBox.SelectedItem == null)
+            if (GenderEditComboBox.SelectedItem == null) //
             {
-                await ShowMessageDialogAsync("Validation Error", "Gender is required.");
+                await ShowMessageDialogAsync("Validation Error", "Gender is required."); //
                 return false;
             }
-            if (double.IsNaN(HeightEditNumberBox.Value) || HeightEditNumberBox.Value <= 0)
+            if (double.IsNaN(HeightEditNumberBox.Value) || HeightEditNumberBox.Value <= 0) //
             {
-                await ShowMessageDialogAsync("Validation Error", "Valid Height is required.");
+                await ShowMessageDialogAsync("Validation Error", "Valid Height is required."); //
                 return false;
             }
-            if (double.IsNaN(WeightEditNumberBox.Value) || WeightEditNumberBox.Value <= 0)
+            if (double.IsNaN(WeightEditNumberBox.Value) || WeightEditNumberBox.Value <= 0) //
             {
-                await ShowMessageDialogAsync("Validation Error", "Valid Weight is required.");
+                await ShowMessageDialogAsync("Validation Error", "Valid Weight is required."); //
                 return false;
             }
             return true;
@@ -168,52 +163,100 @@ namespace HealthAssist.Views
 
         private async void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!_isThemeComboBoxLoaded || ThemeComboBox.SelectedItem == null) return;
+            if (!_isThemeComboBoxLoaded || ThemeComboBox.SelectedItem == null) return; //
 
-            string selectedThemeString = ThemeComboBox.SelectedItem.ToString() ?? "Use system setting";
-            ElementTheme themeToApply = ElementTheme.Default;
-            string themeToSave = "default";
+            string selectedThemeString = ThemeComboBox.SelectedItem.ToString() ?? "Use system setting"; //
+            ElementTheme themeToApply = ElementTheme.Default; //
+            string themeToSave = "default"; //
 
-            switch (selectedThemeString.ToLowerInvariant()) // Use ToLowerInvariant for case-insensitivity
+            switch (selectedThemeString.ToLowerInvariant())
             {
                 case "light":
-                    themeToApply = ElementTheme.Light;
-                    themeToSave = "light";
+                    themeToApply = ElementTheme.Light; //
+                    themeToSave = "light"; //
                     break;
                 case "dark":
-                    themeToApply = ElementTheme.Dark;
-                    themeToSave = "dark";
+                    themeToApply = ElementTheme.Dark; //
+                    themeToSave = "dark"; //
                     break;
-                case "use system setting": // Match XAML item string
+                case "use system setting":
                 default:
-                    themeToApply = ElementTheme.Default;
-                    themeToSave = "default"; // Ensure "default" is saved
+                    themeToApply = ElementTheme.Default; //
+                    themeToSave = "default"; //
                     break;
             }
 
             if (this.XamlRoot?.Content is FrameworkElement rootElement)
             {
-                rootElement.RequestedTheme = themeToApply;
+                rootElement.RequestedTheme = themeToApply; //
             }
-            // Alternatively, call the static method from App.xaml.cs
-            // This might require App.xaml.cs to expose its main window or a method to set theme
-            // For simplicity, current window root is often sufficient for immediate visual change.
-            // If using App.ApplyAppThemeAsync, ensure it can target the current window instance.
-            // await App.ApplyAppThemeAsync(Window.Current); // Window.Current might not be available in unpackaged apps
 
-            await _databaseService.SaveSettingAsync("AppTheme", themeToSave);
+            await _databaseService.SaveSettingAsync("AppTheme", themeToSave); //
         }
 
         private async Task ShowMessageDialogAsync(string title, string message)
         {
             var dialog = new ContentDialog
             {
-                Title = title,
-                Content = message,
-                CloseButtonText = "OK",
+                Title = title, //
+                Content = message, //
+                CloseButtonText = "OK", //
+                XamlRoot = this.XamlRoot //
+            };
+            await dialog.ShowAsync(); //
+        }
+
+        // New event handler for the Reset Application Button
+        // New event handler for the Reset Application Button
+        private async void ResetApplicationButton_Click(object sender, RoutedEventArgs e)
+        {
+            var confirmationDialog = new ContentDialog
+            {
+                Title = "Confirm Reset",
+                Content = "Are you absolutely sure you want to delete all data and reset the application? This action cannot be undone.",
+                PrimaryButtonText = "Yes, Reset Everything",
+                CloseButtonText = "Cancel",
                 XamlRoot = this.XamlRoot
             };
-            await dialog.ShowAsync();
+
+            var result = await confirmationDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                LoadingRing.IsActive = true;
+                ResetApplicationButton.IsEnabled = false;
+                SaveProfileButton.IsEnabled = false;
+
+                try
+                {
+                    await _databaseService.DeleteDatabaseAsync();
+
+                    // **MODIFIED NAVIGATION LOGIC HERE**
+                    var appNavigationFrame = App.GetAppFrame(); // Use the helper from App.xaml.cs
+                    if (appNavigationFrame != null)
+                    {
+                        appNavigationFrame.Navigate(typeof(OnboardingPage));
+                    }
+                    else
+                    {
+                        // Fallback or critical error: This indicates a problem with accessing the main frame.
+                        // For safety, you could try the page's own frame, but it's less ideal.
+                        System.Diagnostics.Debug.WriteLine("CRITICAL: Could not get main app frame for navigation from App.GetAppFrame(). Attempting fallback.");
+                        this.Frame.Navigate(typeof(OnboardingPage));
+                        // If this also fails, there's a more fundamental navigation setup issue.
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await ShowMessageDialogAsync("Error", $"Failed to reset application: {ex.Message}");
+                    ResetApplicationButton.IsEnabled = true;
+                    SaveProfileButton.IsEnabled = true;
+                }
+                finally
+                {
+                    LoadingRing.IsActive = false;
+                }
+            }
         }
     }
 }

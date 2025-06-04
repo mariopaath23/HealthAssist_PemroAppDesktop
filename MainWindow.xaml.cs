@@ -1,11 +1,17 @@
 using Microsoft.UI.Xaml;
 using HealthAssist.Services;
 using HealthAssist.Views;
+using Microsoft.UI.Xaml.Controls; 
 
 namespace HealthAssist
 {
     public sealed partial class MainWindow : Window
     {
+        public Frame AppFrame
+        {
+            get { return ContentFrame; } 
+        }
+
         public MainWindow()
         {
             this.InitializeComponent();
