@@ -1,0 +1,89 @@
+<Page
+    x:Class="HealthAssist.Views.MedicationsListPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HealthAssist.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:HealthAssist.Models"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,16" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BackButton" Grid.Column="0" 
+                    Click="BackButton_Click" 
+                    Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    IsEnabled="{x:Bind Frame.CanGoBack, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    ToolTipService.ToolTip="Back"/>
+
+            <TextBlock Grid.Column="1" Text="Your Medications" FontSize="24" FontWeight="SemiBold" 
+                       VerticalAlignment="Center" HorizontalAlignment="Left" Margin="12,0,0,0"/>
+
+            <Button x:Name="AddMedicationButton" Grid.Column="2" 
+                    Click="AddMedicationButton_Click" 
+                    VerticalAlignment="Center" Style="{ThemeResource AccentButtonStyle}"
+                    HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE710;"/>
+                    <TextBlock Text="Add New"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <ProgressRing x:Name="LoadingRing" Grid.Row="1" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" Height="50"/>
+
+        <ListView x:Name="MedicationsListView"
+                  Grid.Row="1"
+                  IsItemClickEnabled="True"
+                  ItemClick="MedicationsListView_ItemClick"
+                  SelectionMode="None"
+                  Visibility="Collapsed">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Medication">
+                    <Grid Padding="12" ColumnSpacing="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="{StaticResource ControlCornerRadius}" Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="4">
+                            <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" FontSize="18" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{x:Bind Dosage}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="14"/>
+                            <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorTertiaryBrush}">
+                                <Run Text="Started:"/>
+                                <Run Text="{x:Bind StartDate, Converter={StaticResource DateTimeConverter}, ConverterParameter='ShortDate'}"/>
+                                <Run Text="{x:Bind EndDate, Converter={StaticResource DateTimeConverter}, ConverterParameter='ShortDate', TargetNullValue=', Ongoing'}"/>
+                            </TextBlock>
+                        </StackPanel>
+                        <FontIcon Grid.Column="1" Glyph="&#xE76C;" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" ToolTipService.ToolTip="View Details"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Padding" Value="0,0,0,4"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+
+        <TextBlock x:Name="EmptyMessageTextBlock" Grid.Row="1"
+                   Text="No active medications. Tap 'Add New' to get started."
+                   FontSize="18" FontWeight="SemiLight" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   TextWrapping="Wrap" TextAlignment="Center"
+                   Visibility="Collapsed"/>
+    </Grid>
+</Page>

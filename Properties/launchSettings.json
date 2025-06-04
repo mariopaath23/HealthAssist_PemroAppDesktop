@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "HealthAssist (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "HealthAssist (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

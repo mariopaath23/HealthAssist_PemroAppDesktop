@@ -1,0 +1,62 @@
+<Page
+    x:Class="HealthAssist.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HealthAssist.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="24,24,24,16" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BackButton" Grid.Column="0" Click="BackButton_Click" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    IsEnabled="{x:Bind Frame.CanGoBack, Mode=OneWay}" VerticalAlignment="Center" ToolTipService.ToolTip="Back"/>
+
+            <TextBlock Grid.Column="1" Text="Settings" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" Margin="12,0,0,0"/>
+        </Grid>
+
+        <ProgressRing x:Name="LoadingRing" Grid.Row="1" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" Height="50" Canvas.ZIndex="1"/>
+
+        <ScrollViewer Grid.Row="1" x:Name="ContentScrollViewer">
+            <StackPanel Margin="48,0,48,24" Spacing="24" MaxWidth="900" HorizontalAlignment="Center">
+
+                <StackPanel Spacing="12">
+                    <TextBlock Text="User Profile" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <TextBox x:Name="NameEditTextBox" Header="Full Name*"/>
+                    <DatePicker x:Name="DobEditPicker" Header="Date of Birth*"/>
+                    <ComboBox x:Name="BloodTypeEditComboBox" Header="Blood Type*"/>
+                    <TextBox x:Name="AllergiesEditTextBox" Header="Allergies (separate with comma)" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80"/>
+                    <ComboBox x:Name="GenderEditComboBox" Header="Gender*"/>
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <NumberBox x:Name="HeightEditNumberBox" Header="Height (cm)*" Minimum="0" SpinButtonPlacementMode="Compact" Grid.Column="0"/>
+                        <NumberBox x:Name="WeightEditNumberBox" Header="Weight (kg)*" Minimum="0" SmallChange="0.1" LargeChange="1" SpinButtonPlacementMode="Compact" Grid.Column="1"/>
+                    </Grid>
+                    <Button x:Name="SaveProfileButton" Content="Save Profile Changes" Click="SaveProfileButton_Click" Style="{ThemeResource AccentButtonStyle}" HorizontalAlignment="Stretch" Margin="0,12,0,0"/>
+                </StackPanel>
+
+                <Border BorderThickness="0,1,0,0" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Margin="0,12,0,12"/>
+
+                <StackPanel Spacing="12">
+                    <TextBlock Text="App Preferences" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <ComboBox x:Name="ThemeComboBox" Header="App Theme" SelectionChanged="ThemeComboBox_SelectionChanged"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <muxc:TeachingTip x:Name="SuccessTip" Title="Success" Subtitle="Changes saved successfully!" IsLightDismissEnabled="True"/>
+    </Grid>
+</Page>
