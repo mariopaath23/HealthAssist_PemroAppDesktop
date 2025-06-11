@@ -11,29 +11,29 @@
 
     <ScrollViewer>
         <StackPanel Margin="40" MaxWidth="600" HorizontalAlignment="Center">
-            <TextBlock Text="Welcome to Medication Reminder" 
+            <TextBlock Text="Selamat datang di HealthAssist" 
                        FontSize="32" 
                        FontWeight="Bold" 
                        TextAlignment="Center" 
                        Margin="0,0,0,20"/>
 
-            <TextBlock Text="Let's set up your profile" 
+            <TextBlock Text="Silahkan mengatur profil anda" 
                        FontSize="18" 
                        TextAlignment="Center" 
                        Margin="0,0,0,40" 
                        Foreground="Gray"/>
 
             <TextBox x:Name="NameTextBox"
-                     Header="Full Name"
-                     PlaceholderText="Enter your full name"
+                     Header="Nama Lengkap"
+                     PlaceholderText="Masukkan nama lengkap anda"
                      Margin="0,0,0,20"/>
 
             <DatePicker x:Name="DateOfBirthPicker"
-                        Header="Date of Birth"
+                        Header="Tanggal Lahir"
                         Margin="0,0,0,20"/>
 
             <ComboBox x:Name="BloodTypeComboBox"
-                      Header="Blood Type"
+                      Header="Golongan Darah"
                       Margin="0,0,0,20"
                       MinWidth="200">
                 <ComboBoxItem Content="A+"/>
@@ -44,25 +44,25 @@
                 <ComboBoxItem Content="AB-"/>
                 <ComboBoxItem Content="O+"/>
                 <ComboBoxItem Content="O-"/>
-                <ComboBoxItem Content="Unknown"/>
+                <ComboBoxItem Content="Tidak Tahu"/>
             </ComboBox>
 
             <TextBox x:Name="AllergiesTextBox"
-                     Header="Allergies (if any)"
-                     PlaceholderText="List any known allergies"
+                     Header="Alergi (Jika ada)"
+                     PlaceholderText="Masukkan alergi yang anda miliki"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
                      MinHeight="80"
                      Margin="0,0,0,20"/>
 
             <ComboBox x:Name="GenderComboBox"
-                      Header="Gender"
+                      Header="Jenis Kelamin"
                       Margin="0,0,0,20"
                       MinWidth="200">
-                <ComboBoxItem Content="Male"/>
-                <ComboBoxItem Content="Female"/>
-                <ComboBoxItem Content="Other"/>
-                <ComboBoxItem Content="Prefer not to say"/>
+                <ComboBoxItem Content="Laki-laki"/>
+                <ComboBoxItem Content="Perempuan"/>
+                <ComboBoxItem Content="Lainnya"/>
+                <ComboBoxItem Content="Tidak ingin menyebutkan"/>
             </ComboBox>
 
             <Grid Margin="0,0,0,20">
@@ -73,7 +73,7 @@
                 </Grid.ColumnDefinitions>
 
                 <NumberBox x:Name="HeightNumberBox"
-                           Header="Height (cm)"
+                           Header="Tinggi Badan (cm)"
                            PlaceholderText="170"
                            SpinButtonPlacementMode="Compact"
                            Minimum="50"
@@ -81,7 +81,7 @@
                            Grid.Column="0"/>
 
                 <NumberBox x:Name="WeightNumberBox"
-                           Header="Weight (kg)"
+                           Header="Berat Badan (kg)"
                            PlaceholderText="70"
                            SpinButtonPlacementMode="Compact"
                            Minimum="10"
@@ -90,7 +90,7 @@
             </Grid>
 
             <Button x:Name="CompleteOnboardingButton"
-                    Content="Complete Setup"
+                    Content="Selesaikan Setup"
                     Style="{StaticResource AccentButtonStyle}"
                     HorizontalAlignment="Center"
                     Margin="0,20,0,0"
